@@ -59,9 +59,26 @@ h1 {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: none;
     display: inline-block;
+    background-color: currentColor;
+    position: relative;
 }
+
+.color.selected::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #000;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+
 
 .color.yellow { background: #E6CA97; }
 .color.white { background: #D9D9D9; }

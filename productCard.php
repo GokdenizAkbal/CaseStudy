@@ -34,8 +34,8 @@ echo "Gold price per gram (USD): " . round($goldPrice, 2);
 
             <div class="colors">
                 <span class="color yellow" data-img="<?php echo $product['images']['yellow']; ?>"></span>
-                <span class="color rose" data-img="<?php echo $product['images']['rose']; ?>"></span>
                 <span class="color white" data-img="<?php echo $product['images']['white']; ?>"></span>
+                <span class="color rose" data-img="<?php echo $product['images']['rose']; ?>"></span>
             </div>
             <p class="color-name">Yellow Gold</p>
 
@@ -62,8 +62,21 @@ echo "Gold price per gram (USD): " . round($goldPrice, 2);
     document.querySelectorAll('.product-card').forEach(card => {
         const mainImg = card.querySelector('.product-img');
         const colorSpans = card.querySelectorAll('.colors .color');
+
+        colorSpans.forEach(span => {
+            if(span.classList.contains('yellow')){
+                span.classList.add('selected');
+                mainImg.src = span.getAttribute('data-img');
+            }
+        });
+
         colorSpans.forEach(span => {
             span.addEventListener('click', () => {
+
+                colorSpans.forEach(s => s.classList.remove('selected'));
+
+                span.classList.add('selected');
+
                 mainImg.src = span.getAttribute('data-img');
             });
         });
