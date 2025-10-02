@@ -1,15 +1,36 @@
 <?php
 $jsonData = file_get_contents('products.json');
 $products = json_decode($jsonData, true);
+
+$curl = curl_init();
+curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://api.metalpriceapi.com/v1/latest?api_key=fb2795d3f4600fa22697f1d0d6b61fa5&base=USD&currencies=XAU',
+    CURLOPT_RETURNTRANSFER => true,
+));
+$response = curl_exec($curl);
+curl_close($curl);
+
+$data = json_decode($response, true);
+
+if (isset($data['rates']['USDXAU'])) {
+    $goldPerOunce = $data['rates']['USDXAU'];
+    $goldPrice = $goldPerOunce / 31.1035;
+}
+
+echo "Gold price per gram (USD): " . round($goldPrice, 2);
 ?>
+
 
 <h1>Product List</h1>
 <div class="product-list">
     <?php foreach($products as $product): ?>
+        <?php
+        $price = ($product['popularityScore'] + 1) * $product['weight'] * $goldPrice;
+        ?>
         <div class="product-card">
             <img src="<?php echo $product['images']['yellow']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
             <h2><?php echo htmlspecialchars($product['name']); ?></h2>
-            <p class="price">$<?php echo number_format($product['weight'] * 50, 2); ?> USD</p>
+            <p class="price">$<?php echo number_format($price, 2); ?> USD</p>
 
             <div class="colors">
                 <span class="color yellow" data-img="<?php echo $product['images']['yellow']; ?>"></span>
@@ -27,6 +48,7 @@ $products = json_decode($jsonData, true);
         </div>
     <?php endforeach; ?>
 </div>
+
 
 <script>
 
